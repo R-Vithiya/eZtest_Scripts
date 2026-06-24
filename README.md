@@ -2,6 +2,6 @@
 
 Snapshot pushed from ezTest.
 
-- 1 test cases — `test-cases/`
-- 1 automation scripts — `automation-scripts/`
+- 2 test cases — `test-cases/`
+- 2 automation scripts — `automation-scripts/`
 - 1 data sets — `data-sets/`
