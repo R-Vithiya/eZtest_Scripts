@@ -1,30 +1,24 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/test';
+import { LoginPage } from '../pages/LoginPage';
+import { DashboardPage } from '../pages/DashboardPage';
 
-const testData = {
-  url: 'http://inchn0335dc:3000/',
-  username: 'infodba',
-  password: 'infodba'
-};
+describe('Login and SignOut', () => {
+  test('login and sign out', async ({ basePage, page }) => {
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
 
-test('TC001 - Login and Sign Out from Teamcenter', async ({ page }) => {
-  // Step 1: Log in to Teamcenter
-  await page.goto(testData.url + 'login');
-  await page.fill('#username', testData.username);
-  await page.fill('#password', testData.password);
-  await page.click('button[type="submit"]');
+    const url = 'http://inchn0335dc:3000/';
+    const username = 'infodba';
+    const password = 'infodba';
 
-  // Expected: Verify login is successful
-  await expect(page).not.toHaveURL(/login/i);
+    await loginPage.goto(url);
+    await loginPage.signIn(username, password);
+    await loginPage.expectLoginSuccessful();
 
-  // Step 2: Click the Profile Icon
-  await page.getByLabel('Your Profile').click();
+    await dashboardPage.clickProfileIconToggle();
+    await dashboardPage.expectProfileIconToggled();
 
-  // Expected: Verify Profile menu is displayed
-  await expect(page.getByLabel('Sign Out')).toBeVisible();
-
-  // Step 3: Click the Sign Out button
-  await page.getByLabel('Sign Out').click();
-
-  // Expected: Verify successfully logged out
-  await expect(page).toHaveURL(/login/i);
+    await dashboardPage.clickSignOutButton();
+    await dashboardPage.expectSignedOut();
+  });
 });
